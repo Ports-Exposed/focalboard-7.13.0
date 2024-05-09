@@ -113,62 +113,62 @@ jobs:
         name: focalboard-mac.zip
         path: ${{ github.workspace }}/focalboard/mac/dist/focalboard-mac.zip
 
-  windows:
-    runs-on: windows-2022
+  # windows:
+  #   runs-on: windows-2022
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        path: "focalboard"
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+  #     with:
+  #       path: "focalboard"
 
-    - name: Replace token 1 server
-      run: sed -i -e "s,placeholder_rudder_dataplane_url,${{ secrets.RUDDER_DATAPLANE_URL }},g" ${{ github.workspace }}/focalboard/server/services/telemetry/telemetry.go
+  #   - name: Replace token 1 server
+  #     run: sed -i -e "s,placeholder_rudder_dataplane_url,${{ secrets.RUDDER_DATAPLANE_URL }},g" ${{ github.workspace }}/focalboard/server/services/telemetry/telemetry.go
 
-    - name: Replace token 1 webapp
-      run: sed -i -e "s,placeholder_rudder_dataplane_url,${{ secrets.RUDDER_DATAPLANE_URL }},g" ${{ github.workspace }}/focalboard/mattermost-plugin/webapp/src/index.tsx
+  #   - name: Replace token 1 webapp
+  #     run: sed -i -e "s,placeholder_rudder_dataplane_url,${{ secrets.RUDDER_DATAPLANE_URL }},g" ${{ github.workspace }}/focalboard/mattermost-plugin/webapp/src/index.tsx
 
-    - name: Replace token 2 server
-      run: sed -i -e "s,placeholder_rudder_key,${{ secrets.RUDDER_PROD_KEY }},g" ${{ github.workspace }}/focalboard/server/services/telemetry/telemetry.go
+  #   - name: Replace token 2 server
+  #     run: sed -i -e "s,placeholder_rudder_key,${{ secrets.RUDDER_PROD_KEY }},g" ${{ github.workspace }}/focalboard/server/services/telemetry/telemetry.go
 
-    - name: Replace token 2 webapp
-      run: sed -i -e "s,placeholder_rudder_key,${{ secrets.RUDDER_PROD_KEY }},g" ${{ github.workspace }}/focalboard/mattermost-plugin/webapp/src/index.tsx
+  #   - name: Replace token 2 webapp
+  #     run: sed -i -e "s,placeholder_rudder_key,${{ secrets.RUDDER_PROD_KEY }},g" ${{ github.workspace }}/focalboard/mattermost-plugin/webapp/src/index.tsx
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+  #   - name: Add msbuild to PATH
+  #     uses: microsoft/setup-msbuild@v1.1
 
-    - name: npm ci
-      run: cd focalboard/webapp; npm ci --no-optional
+  #   - name: npm ci
+  #     run: cd focalboard/webapp; npm ci --no-optional
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19.5
+  #   - name: Set up Go
+  #     uses: actions/setup-go@v3
+  #     with:
+  #       go-version: 1.19.5
 
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: '5.x'
+  #   - name: Setup NuGet
+  #     uses: nuget/setup-nuget@v1
+  #     with:
+  #       nuget-version: '5.x'
 
-    - name: NuGet Restore
-      run: nuget restore focalboard\win-wpf\Focalboard.sln
+  #   - name: NuGet Restore
+  #     run: nuget restore focalboard\win-wpf\Focalboard.sln
 
-    - name: Build Windows WPF app
-      run: cd focalboard; make win-wpf-app
-      env:
-        BUILD_NUMBER: ${{ github.run_id }}
+  #   - name: Build Windows WPF app
+  #     run: cd focalboard; make win-wpf-app
+  #     env:
+  #       BUILD_NUMBER: ${{ github.run_id }}
 
-    - name: Upload app msix package
-      uses: actions/upload-artifact@v3
-      with:
-        name: focalboard.msix
-        path: ${{ github.workspace }}/focalboard/win-wpf/focalboard.msix
+  #   - name: Upload app msix package
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: focalboard.msix
+  #       path: ${{ github.workspace }}/focalboard/win-wpf/focalboard.msix
 
-    - name: Upload app zip package
-      uses: actions/upload-artifact@v3
-      with:
-        name: focalboard-win.zip
-        path: ${{ github.workspace }}/focalboard/win-wpf/dist/focalboard-win.zip
+  #   - name: Upload app zip package
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: focalboard-win.zip
+  #       path: ${{ github.workspace }}/focalboard/win-wpf/dist/focalboard-win.zip
 
   plugin-release:
     runs-on: ubuntu-20.04
